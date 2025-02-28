@@ -1,8 +1,92 @@
 <!DOCTYPE html>
 <html>
-    <body>
-        <div id="sudoku_board">
-
+    <head>
+        <style>
+            input[type="number"]::-webkit-inner-spin-button,
+            input[type="number"]::-webkit-outer-spin-button {
+                -webkit-appearance: none;
+                margin: 0;
+            }
+            input[type="number"] {
+                -moz-appearance: textfield;
+            }
+            .cell{
+                width:50px;
+                height: 50px;
+                padding:0;
+                line-height: 50px;
+                text-align:center;
+                font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+                font-size: 20px
+            }
+        </style>
+        <script>
+            function createBoard(){
+                var board_area = document.getElementById("sudoku_board")
+                for(var i = 0; i < 9; i++){
+                    for(var j = 0; j < 9; j++){
+                        var inputArea = document.createElement("input")
+                        inputArea.className="cell"
+                        inputArea.type = "text"
+                        inputArea.pattern = "[0-9]"
+                        inputArea.title = "Single Digit"
+                        inputArea.maxLength = "1"
+                        board_area.appendChild(inputArea)
+                    }
+                }
+            }
+        </script>
+    </head>
+    <body onload="createBoard()">
+        <h1>Sudoku Solver</h1>
+        <div id="sudoku_area">
+            <table id="sudoku_board">
+                <tr id="row1">
+                    <td></td><td></td><td></td>
+                    <td></td><td></td><td></td>
+                    <td></td><td></td><td></td>
+                </tr>
+                <tr id="row2">
+                    <td></td><td></td><td></td>
+                    <td></td><td></td><td></td>
+                    <td></td><td></td><td></td>
+                </tr>
+                <tr id="row3">
+                    <td></td><td></td><td></td>
+                    <td></td><td></td><td></td>
+                    <td></td><td></td><td></td>
+                </tr>
+                <tr id="row4">
+                    <td></td><td></td><td></td>
+                    <td></td><td></td><td></td>
+                    <td></td><td></td><td></td>
+                </tr>
+                <tr id="row5">
+                    <td></td><td></td><td></td>
+                    <td></td><td></td><td></td>
+                    <td></td><td></td><td></td>
+                </tr>
+                <tr id="row6">
+                    <td></td><td></td><td></td>
+                    <td></td><td></td><td></td>
+                    <td></td><td></td><td></td>
+                </tr>
+                <tr id="row7">
+                    <td></td><td></td><td></td>
+                    <td></td><td></td><td></td>
+                    <td></td><td></td><td></td>
+                </tr>
+                <tr id="row8">
+                    <td></td><td></td><td></td>
+                    <td></td><td></td><td></td>
+                    <td></td><td></td><td></td>
+                </tr>
+                <tr id="row9">
+                    <td></td><td></td><td></td>
+                    <td></td><td></td><td></td>
+                    <td></td><td></td><td></td>
+                </tr>
+            </table>
         </div>
     </body>
 </html>
