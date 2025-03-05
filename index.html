@@ -8,26 +8,69 @@
                 align-items: center;
                 justify-content: center;
             }
-            #sudoku_area{
-                display: grid;
-                grid-template-columns: repeat(9, 60px);
-                grid-template-rows: repeat(9, 60px);
-                justify-content: center;
-                margin:10px;
+            #sudoku_board{
+                border-collapse:collapse;
+                border-spacing:0px;
             }
             .cell{
                 width:60px;
                 height: 60px;
-                padding:0;
-                line-height: 50px;
+                line-height: 60px;
                 text-align:center;
                 font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
-                font-size: 20px
+                font-size: 20px;
             }
+            .button{
+                font-size:20px;
+                margin:10px;
+            } 
+
         </style>
         <script>
             function createBoard(){
-                var board_area = document.getElementById("sudoku_area")
+                var board_area = document.getElementById("sudoku_board")
+                var rows = board_area.rows
+                for (row of rows){
+                    var cellLocations = row.children
+                    for (loc of cellLocations){
+                        var inputArea = document.createElement("input")
+                        inputArea.className = "cell"
+                        inputArea.type = "text"
+                        inputArea.maxLength = "1"
+
+                        if (row.id == "row1"){
+                            row.style.borderTop = "2px solid black"
+                        }
+
+                        if (row.id == "row3" || row.id == "row6"){
+                            row.style.borderBottom = "5px solid black"
+                        }
+                        else if (row.id != "row9"){
+                            row.style.borderBottom = "1px solid darkgray"
+                        }
+                        else{
+                            row.style.borderBottom = "2px solid black"
+                        }
+                        
+                        if (loc.className == "firstCell"){
+                            loc.style.borderLeft = "2px solid black"
+                        }
+
+                        if (loc.className == "right-border"){
+                            loc.style.borderRight = "5px solid black"
+                        }
+                        else if (loc.className != "rightCell"){
+                            loc.style.borderRight = "1px solid darkgray"
+                        }
+                        else{
+                            loc.style.borderRight = "2px solid black"
+                        }
+
+
+                        loc.appendChild(inputArea)
+                    }
+                }
+                /*
                 for(var i = 0; i < 9; i++){
                     for(var j = 0; j < 9; j++){
                         var inputArea = document.createElement("input")
@@ -39,6 +82,14 @@
                         board_area.appendChild(inputArea)
                     }
                 }
+                */
+            }
+
+            function clearInputs(){
+                var cells = document.getElementsByClassName("cell")
+                for (cell of cells){
+                    cell.value = ""
+                }
             }
 
             function grabInputs(){
@@ -48,13 +99,20 @@
                 for (var i=0; i < 9; i++){
                     var newRow = []
                     for(var j=0; j < 9; j++){
-                        if (cells[counter].value.trim() != ""){
-                            var num = Number(cells[counter].value.trim())
+                        var text = cells[counter].value.trim()
+                        if (isNaN(text)){
+                            alert("Non-numerical input given")
+                            return
+                        }
+
+                        if (text != ""){
+                            var num = Number(text)
                             newRow[j] = num
                         }
                         else{
                             newRow[j] = 0
                         }
+                        counter++
                     }
                     boardArray[i] = newRow
                 }
@@ -65,58 +123,57 @@
     <body onload="createBoard()">
         <h1>Sudoku Solver</h1>
         <div id="container">
-            <div id="sudoku_area">
-            </div>
-            <button>Solve!</button>
-        </div>
-    </body>
-    <!--
-    <table id="sudoku_board">
+            <table id="sudoku_board">
                 <tr id="row1">
-                    <td></td><td></td><td></td>
-                    <td></td><td></td><td></td>
-                    <td></td><td></td><td></td>
+                    <td class="firstCell"></td><td></td><td class="right-border"></td>
+                    <td class="firstCell"></td><td></td><td class="right-border"></td>
+                    <td class="firstCell"></td><td></td><td class="rightCell"></td>
                 </tr>
                 <tr id="row2">
-                    <td></td><td></td><td></td>
-                    <td></td><td></td><td></td>
-                    <td></td><td></td><td></td>
+                    <td class="firstCell"></td><td></td><td class="right-border"></td>
+                    <td class="firstCell"></td><td></td><td class="right-border"></td>
+                    <td class="firstCell"></td><td></td><td class="rightCell"></td>
                 </tr>
                 <tr id="row3">
-                    <td></td><td></td><td></td>
-                    <td></td><td></td><td></td>
-                    <td></td><td></td><td></td>
+                    <td class="firstCell"></td><td></td><td class="right-border"></td>
+                    <td class="firstCell"></td><td></td><td class="right-border"></td>
+                    <td class="firstCell"></td><td></td><td class="rightCell"></td>
                 </tr>
                 <tr id="row4">
-                    <td></td><td></td><td></td>
-                    <td></td><td></td><td></td>
-                    <td></td><td></td><td></td>
+                    <td class="firstCell"></td><td></td><td class="right-border"></td>
+                    <td class="firstCell"></td><td></td><td class="right-border"></td>
+                    <td class="firstCell"></td><td></td><td class="rightCell"></td>
                 </tr>
                 <tr id="row5">
-                    <td></td><td></td><td></td>
-                    <td></td><td></td><td></td>
-                    <td></td><td></td><td></td>
+                    <td class="firstCell"></td><td></td><td class="right-border"></td>
+                    <td class="firstCell"></td><td></td><td class="right-border"></td>
+                    <td class="firstCell"></td><td></td><td class="rightCell"></td>
                 </tr>
                 <tr id="row6">
-                    <td></td><td></td><td></td>
-                    <td></td><td></td><td></td>
-                    <td></td><td></td><td></td>
+                    <td class="firstCell"></td><td></td><td class="right-border"></td>
+                    <td class="firstCell"></td><td></td><td class="right-border"></td>
+                    <td class="firstCell"></td><td></td><td class="rightCell"></td>
                 </tr>
                 <tr id="row7">
-                    <td></td><td></td><td></td>
-                    <td></td><td></td><td></td>
-                    <td></td><td></td><td></td>
+                    <td class="firstCell"></td><td></td><td class="right-border"></td>
+                    <td class="firstCell"></td><td></td><td class="right-border"></td>
+                    <td class="firstCell"></td><td></td><td class="rightCell"></td>
                 </tr>
                 <tr id="row8">
-                    <td></td><td></td><td></td>
-                    <td></td><td></td><td></td>
-                    <td></td><td></td><td></td>
+                    <td class="firstCell"></td><td></td><td class="right-border"></td>
+                    <td class="firstCell"></td><td></td><td class="right-border"></td>
+                    <td class="firstCell"></td><td></td><td class="rightCell"></td>
                 </tr>
                 <tr id="row9">
-                    <td></td><td></td><td></td>
-                    <td></td><td></td><td></td>
-                    <td></td><td></td><td></td>
+                    <td class="firstCell"></td><td></td><td class="right-border"></td>
+                    <td class="firstCell"></td><td></td><td class="right-border"></td>
+                    <td class="firstCell"></td><td></td><td class="rightCell"></td>
                 </tr>
             </table>
-    -->
+            <div>
+                <button class="button" onclick="grabInputs()">Solve!</button>
+                <button class="button" onclick="clearInputs()">Clear</button>
+            </div>
+        </div>
+    </body>
 </html>
