@@ -39,8 +39,10 @@
                 return new Promise(resolve => setTimeout(resolve, ms));
             } 
 
-            function updateSpeed(currentSpeed){
-
+            function updateSpeed(newSpeed){
+                speed = newSpeed
+                var speedLabel = document.getElementById("speedValue")
+                speedLabel.innerText = newSpeed + "ms"
             }
 
             function createBoard(){
@@ -257,7 +259,7 @@
                 <button class="button" onclick="stopSolving()">Stop</button>
             </div>
             <label for="speedControl">Speed: <span id="speedValue">100 ms</span></label>
-            <input type="range" id="speedControl" min="1" max="1000" step="5" value="100" oninput="updateSpeed(this.value)">
+            <input type="range" id="speedControl" min="1" max="1000" step="1" value="100" oninput="updateSpeed(this.value)">
         </div>
     </body>
 </html>
