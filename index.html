@@ -28,6 +28,21 @@
 
         </style>
         <script>
+            var stopSignal = false
+            var speed = 100
+
+            function stopSolving(){
+                stopSignal = true
+            }
+
+            function sleep(ms) {
+                return new Promise(resolve => setTimeout(resolve, ms));
+            } 
+
+            function updateSpeed(currentSpeed){
+
+            }
+
             function createBoard(){
                 var board_area = document.getElementById("sudoku_board")
                 var rows = board_area.rows
@@ -80,7 +95,8 @@
                 }
             }
 
-            function grabInputs(){
+            async function grabInputs(){
+                stopSignal = false
                 var cells = document.getElementsByClassName("cell")
                 var boardArray = []
                 var counter = 0
@@ -104,27 +120,30 @@
                     }
                     boardArray[i] = newRow
                 }
-                solveBoard(boardArray)
+                var solved = solveBoard(boardArray)
+                if (!solved && !stopSignal){
+                    alert("This board is not solvable!")
+                }
             }
 
-            function possible(board, x, y, num){
+            function possible(board, row, col, num){
                 // Check if the row or column to place the num at already has the same num
                 for (var i = 0; i < 9; i++){
-                    if (board[x][i] == num){
+                    if (board[row][i] == num){
                         return false
                     }
-                    if (board[i][y] == num){
+                    if (board[i][col] == num){
                         return false
                     }
                 }
                 
                 // Check if the 3x3 grid has the same num
-                var y3 = Math.floor(y / 3) * 3
-                var x3 = Math.floor(x / 3) * 3
+                var startRow = Math.floor(row / 3) * 3
+                var startCol = Math.floor(col / 3) * 3
 
                 for (var i = 0; i < 3; i++){
                     for (var j = 0; j < 3; j++){
-                        if (board[x3 + i][y3 + j] == num){
+                        if (board[startRow + i][startCol + j] == num){
                             return false
                         }
                     }
@@ -132,24 +151,54 @@
                 return true
 
             }
-            function solveBoard(board){
+              
+            async function solveBoard(board){
+                if (stopSignal){
+                    return false
+                }
                 for (var i = 0; i < 9; i++){
                     for (var j = 0; j < 9; j++){
                         if (board[i][j] == 0){
                             for (var num = 1; num < 10; num++){
-                                if (possible(board, j, i, num)){
+                                if (stopSignal){
+                                    return false
+                                }
+                                if (possible(board, i, j, num)){
+                                    await sleep(speed)
                                     board[i][j] = num
                                     updatePage(board)
-                                    solveBoard()
+                                    if(await solveBoard(board)){
+                                        return true
+                                    }
+                                    await sleep(speed)
                                     board[i][j] = 0
+                                    if (!stopSignal){
+                                        updatePage(board)
+                                    }
                                 }
                             }
-                            alert("This board is not solvable")
-                            return
+                            return false
                         }
                     }
                 }
+                return true
             }
+            function updatePage(board){
+                var cells = document.getElementsByClassName("cell")
+                var counter = 0
+                for (var i = 0; i < board.length; i++){
+                    for (var j = 0; j < board[i].length; j++){
+                        cells[counter].value = String(board[i][j])
+                        counter++
+                    }
+                }
+                for (cell of cells){
+                    if (cell.value.trim() == "0"){
+                        cell.value = ""
+                    }
+                }
+            }
+
         </script>
     </head>
     <body onload="createBoard()">
@@ -203,9 +252,12 @@
                 </tr>
             </table>
             <div>
-                <button class="button" onclick="grabInputs()">Solve!</button>
+                <button class="button" onclick="grabInputs()">Solve</button>
                 <button class="button" onclick="clearInputs()">Clear</button>
+                <button class="button" onclick="stopSolving()">Stop</button>
             </div>
+            <label for="speedControl">Speed: <span id="speedValue">100 ms</span></label>
+            <input type="range" id="speedControl" min="1" max="1000" step="5" value="100" oninput="updateSpeed(this.value)">
         </div>
     </body>
 </html>
