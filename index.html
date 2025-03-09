@@ -19,6 +19,7 @@
                 text-align:center;
                 font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
                 font-size: 20px;
+                box-sizing: border-box;
             }
             .button{
                 font-size:20px;
@@ -70,19 +71,6 @@
                         loc.appendChild(inputArea)
                     }
                 }
-                /*
-                for(var i = 0; i < 9; i++){
-                    for(var j = 0; j < 9; j++){
-                        var inputArea = document.createElement("input")
-                        inputArea.className="cell"
-                        inputArea.type = "text"
-                        inputArea.pattern = "[0-9]"
-                        inputArea.title = "Single Digit"
-                        inputArea.maxLength = "1"
-                        board_area.appendChild(inputArea)
-                    }
-                }
-                */
             }
 
             function clearInputs(){
@@ -116,7 +104,51 @@
                     }
                     boardArray[i] = newRow
                 }
-                console.log(boardArray)
+                solveBoard(boardArray)
+            }
+
+            function possible(board, x, y, num){
+                // Check if the row or column to place the num at already has the same num
+                for (var i = 0; i < 9; i++){
+                    if (board[x][i] == num){
+                        return false
+                    }
+                    if (board[i][y] == num){
+                        return false
+                    }
+                }
+                
+                // Check if the 3x3 grid has the same num
+                var y3 = Math.floor(y / 3) * 3
+                var x3 = Math.floor(x / 3) * 3
+
+                for (var i = 0; i < 3; i++){
+                    for (var j = 0; j < 3; j++){
+                        if (board[x3 + i][y3 + j] == num){
+                            return false
+                        }
+                    }
+                }
+                return true
+
+            }
+            function solveBoard(board){
+                for (var i = 0; i < 9; i++){
+                    for (var j = 0; j < 9; j++){
+                        if (board[i][j] == 0){
+                            for (var num = 1; num < 10; num++){
+                                if (possible(board, j, i, num)){
+                                    board[i][j] = num
+                                    updatePage(board)
+                                    solveBoard()
+                                    board[i][j] = 0
+                                }
+                            }
+                            alert("This board is not solvable")
+                            return
+                        }
+                    }
+                }
             }
         </script>
     </head>
