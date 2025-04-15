@@ -122,6 +122,7 @@
                     }
                     boardArray[i] = newRow
                 }
+
                 var solved = solveBoard(boardArray)
                 if (!solved && !stopSignal){
                     alert("This board is not solvable!")
@@ -253,6 +254,7 @@
                     <td class="firstCell"></td><td></td><td class="rightCell"></td>
                 </tr>
             </table>
+
             <div>
                 <button class="button" onclick="grabInputs()">Solve</button>
                 <button class="button" onclick="clearInputs()">Clear</button>
